@@ -26,6 +26,12 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install delocate
         pip install -r requirements.txt
+    - name: Combine Wheels
+      run: |
+        source venv/bin/activate
+        python universal2_wheels.py
+    - name: Reinstall in universal2
+      run: |
         pip install combined_wheels/opencv_python-4.10.0.84-cp37-abi3-macosx_12_0_universal2.whl --force-reinstall
         pip install combined_wheels/pillow-10.3.0-cp312-cp312-macosx_11_0_universal2.whl --force-reinstall
         pip install combined_wheels/numpy-2.0.0-cp312-cp312-macosx_11_0_universal2.whl --force-reinstall
