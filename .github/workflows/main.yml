@@ -52,13 +52,13 @@ jobs:
 
     - name: Move built app to dist directory
       run: |
-        mv dist/*.app ../dist/
-        
+        mv dist/*.app dist/
+
     - name: Upload build artifacts
       uses: actions/upload-artifact@v2
       with:
         name: built-app
-        path: ../dist/*.app
+        path: dist/*.app
 
     - name: Create Release
       id: create_release
@@ -77,6 +77,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ../dist/*.app
+        asset_path: dist/*.app
         asset_name: myapp.app
         asset_content_type: application/octet-stream
