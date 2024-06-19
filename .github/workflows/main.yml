@@ -47,8 +47,9 @@ jobs:
         source venv/bin/activate
         python setup.py py2app
         
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: built-app
-        path: dist/
+    - name: Create dist directory
+      run: mkdir -p dist
+
+    - name: Move built app to dist directory
+      run: |
+        mv dist/*.app ../dist/
