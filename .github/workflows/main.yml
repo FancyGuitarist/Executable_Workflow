@@ -1,0 +1,40 @@
+name: Python MacOS Universal2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12.3'
+        architecture: 'x64'
+
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        python -m pip install --upgrade pip
+        python -m pip install delocate
+        pip install -r requirements.txt
+        pip install combined_wheels/opencv_python-4.10.0.84-cp37-abi3-macosx_12_0_universal2.whl --force-reinstall
+        pip install combined_wheels/pillow-10.3.0-cp312-cp312-macosx_11_0_universal2.whl --force-reinstall
+        pip install combined_wheels/numpy-2.0.0-cp312-cp312-macosx_11_0_universal2.whl --force-reinstall
+
+    - name: Copy tk files into lib of venv
+      run: |
+        source venv/bin/activate
+        cp -r tk_files/* venv/lib/
+        
+    - name: Run script
+      run: |
+        python setup.py py2app
