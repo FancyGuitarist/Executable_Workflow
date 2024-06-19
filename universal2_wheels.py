@@ -3,6 +3,8 @@ from pathlib import Path
 
 
 def main():
+    if not Path('combined_wheels').exists():
+        Path('combined_wheels').mkdir()
     if not Path('combined_wheels/opencv_python-4.10.0.84-cp37-abi3-macosx_12_0_universal2.whl').exists():
         fuse_wheels('wheels_to_combine/opencv_python-4.10.0.84-cp37-abi3-macosx_11_0_arm64.whl',
                     'wheels_to_combine/opencv_python-4.10.0.84-cp37-abi3-macosx_12_0_x86_64.whl',
