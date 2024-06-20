@@ -57,5 +57,5 @@ jobs:
     - name: Upload build artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: built-app
+        name: ExecutableApp
         path: dist/*.app
