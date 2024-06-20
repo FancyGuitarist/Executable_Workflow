@@ -24,7 +24,7 @@ jobs:
         python -m venv venv
         source venv/bin/activate
         python -m pip install --upgrade pip
-        python -m pip install delocate
+        python -m pip install delocate py2app
         pip install -r requirements.txt
     - name: Combine Wheels
       run: |
@@ -45,10 +45,13 @@ jobs:
     - name: Build App
       run: |
         source venv/bin/activate
-        python setup.py py2app
+        python setup.py py2app -v
+        
+    - name: Ensure execution permissions
+      run: chmod +x dist/*.app/Contents/MacOS/*
         
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: built-app
         path: dist/*.app
