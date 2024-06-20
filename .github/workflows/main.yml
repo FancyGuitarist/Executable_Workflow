@@ -3,7 +3,7 @@ name: Python MacOS Universal2
 on:
   push:
     tags:
-      - 'v*.*.*'  # Trigger on version tags, e.g., v1.0.0
+      - 'v*.*.*'
 
 jobs:
   build:
@@ -26,10 +26,12 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install delocate py2app
         pip install -r requirements.txt
+
     - name: Combine Wheels
       run: |
         source venv/bin/activate
         python universal2_wheels.py
+
     - name: Reinstall in universal2
       run: |
         source venv/bin/activate
@@ -46,10 +48,12 @@ jobs:
       run: |
         source venv/bin/activate
         python setup.py py2app -v
-        
+
     - name: Ensure execution permissions
-      run: chmod +x dist/*.app/Contents/MacOS/*
-        
+      run: |
+        chmod +x dist/*.app/Contents/MacOS/*
+        ls -l dist/*.app/Contents/MacOS/
+
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
@@ -60,7 +64,7 @@ jobs:
       id: create_release
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.ref }}
@@ -70,7 +74,7 @@ jobs:
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: dist/*.app
