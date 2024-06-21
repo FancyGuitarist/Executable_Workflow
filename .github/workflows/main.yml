@@ -12,6 +12,10 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+      
+    - name: Set Output
+      id: vars
+      run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -53,10 +57,13 @@ jobs:
       run: |
         chmod +x dist/*.app/Contents/MacOS/*
         ls -l dist/*.app/Contents/MacOS/
+    - name: Zip App
+      run: |
+         zip -r ExecutableApp${{ steps.vars.output.tag }}.zip dist/*.app
 
     - name: GH Release
       uses: softprops/action-gh-release@v2.0.6
       with: 
         files: |
-            dist/*.app
+            ExecutableApp${{ steps.vars.output.tag }}.zip
             
