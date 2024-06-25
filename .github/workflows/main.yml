@@ -64,7 +64,6 @@ jobs:
       run: |
          cd dist/
          zip -r ExecutableApp${{ steps.changelog.outputs.tag }}.zip *.app
-         ls
          
     - name: GH Release
       uses: softprops/action-gh-release@v2.0.6
