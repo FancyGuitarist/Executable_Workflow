@@ -63,7 +63,7 @@ jobs:
     - name: Zip App
       run: |
          cd dist/
-         zip -r ExecutableApp${{ steps.vars.output.tag }}.zip *.app
+         zip -r ExecutableApp${{ steps.changelog.outputs.tag }}.zip *.app
          ls
          
     - name: GH Release
