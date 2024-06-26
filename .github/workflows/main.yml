@@ -2,7 +2,12 @@ name: Python MacOS Universal2
 
 on:
   push:
-
+    branches:
+    - master
+    - develop
+    - preRelease/*
+  pull_request:
+  
 jobs:
   build:
     runs-on: macos-latest
