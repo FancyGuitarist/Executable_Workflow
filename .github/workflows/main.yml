@@ -4,8 +4,6 @@ on:
   push:
     branches:
     - master
-    - develop
-    - preRelease/*
   pull_request:
   
 jobs:
@@ -18,15 +16,15 @@ jobs:
       
     - name: Conventional Changelog Action
       id: changelog
-      uses: TriPSs/conventional-changelog-action@v5
+      uses: TriPSs/conventional-changelog-action@latest
       with:
+        preset: “conventionalcommits”
         github-token: ${{ secrets.github_token }}
-        output-file: "false"
         release-count: 0
         skip-on-empty: "false"
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.12.3'
         architecture: 'x64'
@@ -65,13 +63,14 @@ jobs:
       run: |
         chmod +x dist/*.app/Contents/MacOS/*
         ls -l dist/*.app/Contents/MacOS/
+        
     - name: Zip App
       run: |
          cd dist/
          zip -r ExecutableApp${{ steps.changelog.outputs.tag }}.zip *.app
          
     - name: GH Release
-      uses: softprops/action-gh-release@v2.0.6
+      uses: softprops/action-gh-release@v2
       if: ${{ steps.changelog.outputs.skipped == 'false' }}
       env:
         GITHUB_TOKEN: ${{ secrets.github_token }}
